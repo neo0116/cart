@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.store.order.mapper.OrderMapper">
+
+	<sql id="tableName">`order`</sql>
+	
+	<resultMap type="Order" id="pojoResultMap" autoMapping="true">
+		<id column="orderId" property="orderId"/>
+		<association property="ordershipping" javaType="ordershipping" column="orderId" select="queryordershippingByOrderId" autoMapping="true"></association>
+		<collection property="orderproducts" javaType="Arraylist" ofType="OrderProduct" autoMapping="true" select="queryOrderProductByOrderId" column="orderId">
+		</collection>
+	</resultMap>
+	
+	<select id="queryOrderProductByOrderId" resultType="OrderProduct" parameterType="String">
+		SELECT * FROM orderproduct WHERE orderId = #{orderId};
+	</select>
+	
+	<select id="queryordershippingByOrderId" resultType="ordershipping" parameterType="String">
+		SELECT * FROM ordershipping WHERE orderId = #{orderId};
+	</select>
+
+	<select id="queryList" resultMap="pojoResultMap">
+		SELECT
+			*
+		FROM
+			<include refid="tableName"/>
+	</select>
+	
+	<select id="queryByID" resultMap="pojoResultMap">
+		SELECT
+			*
+		FROM
+			<include refid="tableName"/>
+		WHERE orderId = #{id};
+	</select>
+	
+	<select id="queryByWhere" parameterType="Where" resultMap="pojoResultMap">
+		SELECT
+			*
+		FROM
+			<include refid="tableName"/>
+		WHERE  ${where.column} ${where.operater} #{where.value} LIMIT 1;
+	</select>
+	
+	<select id="queryListByWhere" parameterType="Where" resultMap="pojoResultMap">
+		SELECT
+			*
+		FROM
+			<include refid="tableName"/>
+		WHERE  ${where.column} ${where.operater} #{where.value};
+	</select>
+	
+	<insert id="save"> 
+		INSERT INTO <include refid="tableName"/> VALUES (#{orderId},#{payment},#{paymentType},#{postFee},#{status},#{createTime},#{updateTime},#{paymentTime},#{consignTime},#{endTime},#{closeTime},#{shippingName},#{shippingCode},#{userId},#{buyerMessage},#{buyerNick},#{buyerRate});
+		INSERT INTO orderproduct VALUES 
+		<foreach collection="orderproducts" item="product" separator=",">
+			(#{product.productId},#{orderId},#{product.num},#{product.title},#{product.price},#{product.totalFee},#{product.imagePath})
+		</foreach>
+		;
+		INSERT INTO ordershipping VALUES (#{orderId},#{ordershipping.receiverName},#{ordershipping.receiverPhone},#{ordershipping.receiverMobile},#{ordershipping.receiverState},#{ordershipping.receiverCity},#{ordershipping.receiverDistrict},#{ordershipping.receiverAddress},#{ordershipping.receiverZip},NOW(),NOW());
+	</insert>
+	
+	<update id="update">
+		UPDATE <include refid="tableName"/> 
+		<set>
+			<if test="payment !=null and payment != ''">
+				payment = #{payment},
+			</if>
+			<if test="postFee !=null and postFee != ''">
+				postFee = #{postFee},
+			</if>
+			<if test="status !=null and status != ''">
+				status = #{status},
+			</if>
+			<if test="updateTime !=null and updateTime != ''">
+				updateTime = #{updateTime},
+			</if>
+			<if test="paymentTime !=null and paymentTime != ''">
+				paymentTime = #{paymentTime},
+			</if>
+			<if test="consignTime !=null and consignTime != ''">
+				consignTime = #{consignTime},
+			</if>
+			<if test="endTime !=null and endTime != ''">
+				endTime = #{endTime},
+			</if>
+			<if test="closeTime !=null and closeTime != ''">
+				closeTime = #{closeTime},
+			</if>
+			<if test="shippingName !=null and shippingName != ''">
+				shippingName = #{shippingName},
+			</if>
+			<if test="shippingCode !=null and shippingCode != ''">
+				shippingCode = #{shippingCode},
+			</if>
+			<if test="buyerMessage !=null and buyerMessage != ''">
+				buyerMessage = #{buyerMessage},
+			</if>
+			<if test="buyerRate !=null and buyerRate != ''">
+				buyerRate = #{buyerRate},
+			</if>
+		</set>
+		WHERE orderId = #{orderId};
+	</update>
+	
+	<delete id="deleteByID" parameterType="Long">
+		DELETE FROM <include refid="tableName"/> WHERE orderId = #{orderId};
+		DELETE FROM orderproduct WHERE orderId = #{orderId};
+	</delete>
+	
+	<delete id="deleteByIDS" parameterType="list">
+		DELETE FROM <include refid="tableName"/> WHERE orderId IN 
+		<foreach collection="ids" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>;
+		DELETE FROM orderproduct WHERE orderId IN 
+		<foreach collection="ids" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>;
+	</delete>
+	<!-- 关闭订单的方法 -->
+	<update id="paymentOrderScan" parameterType="Date">
+		UPDATE `Order` SET
+			status = 6,
+			updateTime = NOW(),
+			closeTime = NOW(),
+			endTime = NOW()
+		WHERE status = 1 AND paymentType = 1 AND createTime &lt;= #{date}
+	</update>
+	
+</mapper>
