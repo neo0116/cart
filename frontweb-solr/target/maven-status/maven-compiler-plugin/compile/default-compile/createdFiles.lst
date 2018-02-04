@@ -1,0 +1,6 @@
+com\oracle\frontweb\solr\controller\SolrController.class
+com\oracle\frontweb\solr\service\impl\SolrServiceImpl.class
+com\oracle\frontweb\solr\rabbitmq\ProductListener.class
+com\oracle\frontweb\solr\pojo\SolrReturn.class
+com\oracle\frontweb\solr\service\SolrService.class
+com\oracle\frontweb\solr\pojo\Product.class
