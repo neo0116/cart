@@ -1,0 +1,2 @@
+com\oracle\sso\service\UserService.class
+com\oracle\sso\service\utils\redis\RedisUtils.class
