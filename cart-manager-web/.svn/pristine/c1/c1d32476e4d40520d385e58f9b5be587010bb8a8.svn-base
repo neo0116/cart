@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<mvc:annotation-driven />
+<!-- 	<mvc:default-servlet-handler/> -->
+
+	<context:property-placeholder location="classpath:properties/*.properties"/>
+
+	<context:component-scan base-package="com.oracle.cart.controller"></context:component-scan>
+	<!-- 视图解析器 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<!-- 文件上传解析器 -->
+<!-- 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> -->
+<!-- 		<property name="maxUploadSize" value="8388608"></property> -->
+<!-- 	</bean> -->
+	
+	<!-- dubbo消费者的应用名称 -->
+	<dubbo:application name="serviceconsumer" />
+	<!-- 注册到zookeeper上 -->
+	<dubbo:registry address="192.168.175.133:2181" protocol="zookeeper" />
+	<!-- zookeeper用的是dubbo协议 -->
+	<dubbo:protocol name="dubbo" port="20883"></dubbo:protocol>
+	<!-- 调用的服务 -->
+	<dubbo:reference interface="com.oracle.cart.service.CartService"
+		id="cartService" timeout="1000000"></dubbo:reference>
+
+</beans>
