@@ -1,0 +1,7 @@
+CHECK_USER_LOGIN = http://sso.oracle.com/user/
+CART_LIST = http://cart.oracle.com/restful/cart/
+DISPLAY_PRODUCT_URL = http://manager.oracle.com/restful/dispalyproduct/
+ADD_CART = http://cart.oracle.com/restful/cart
+DELETE_CART = http://cart.oracle.com/restful/cart/
+UPDATA_NUM = http://cart.oracle.com/restful/cart/
+COOKIE_CART = cookie_cart
