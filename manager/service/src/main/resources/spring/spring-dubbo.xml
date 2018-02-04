@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!-- 扫描服务提供层 -->
+	<context:component-scan base-package="com.oracle.manager.service.serviceimpl" />
+
+	<!-- dubbo的服务提供者应用名称 -->
+	<dubbo:application name="serviceprovider" />
+	<!-- dubbo的注册中心 -->
+	
+	<dubbo:registry protocol="zookeeper" address="192.168.175.133:2181" />
+	<!-- dubbo的协议 -->
+	<dubbo:protocol name="dubbo" port="20880" />
+	<!-- 需要提供的服务 -->
+	<dubbo:service interface="com.oracle.manager.service.TestService"
+		ref="testServiceImpl" timeout="1000000"></dubbo:service>
+	<dubbo:service interface="com.oracle.manager.service.CategoryService"
+		ref="categoryServiceImpl" timeout="1000000"></dubbo:service>
+	<dubbo:service interface="com.oracle.manager.service.ProductService"
+		ref="productServiceImpl" timeout="1000000"></dubbo:service>
+	<dubbo:service interface="com.oracle.manager.service.utils.RedisUtils"
+		ref="redisUtilsImpl" timeout="1000000"></dubbo:service>
+	<dubbo:service interface="com.oracle.manager.service.ContentCategoryService"
+		ref="contentCategoryServiceImpl" timeout="1000000"></dubbo:service>
+	<dubbo:service interface="com.oracle.manager.service.ContentService"
+		ref="contentServiceImpl" timeout="1000000"></dubbo:service>
+</beans>

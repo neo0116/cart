@@ -1,0 +1,8 @@
+com\oracle\manager\pojo\Content.class
+com\oracle\manager\pojo\Category.class
+com\oracle\manager\pojo\Productdesc.class
+com\oracle\manager\pojo\Cart.class
+com\oracle\manager\pojo\Contentcategory.class
+com\oracle\manager\pojo\User.class
+com\oracle\manager\pojo\TestG.class
+com\oracle\manager\pojo\Product.class

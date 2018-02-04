@@ -1,0 +1,7 @@
+com\oracle\manager\mapper\CartMapper.class
+com\oracle\manager\mapper\ContentMapper.class
+com\oracle\manager\mapper\ProductdescMapper.class
+com\oracle\manager\mapper\ProductMapper.class
+com\oracle\manager\mapper\ContentCategoryMapper.class
+com\oracle\manager\mapper\CategoryMapper.class
+com\oracle\manager\mapper\UserMapper.class

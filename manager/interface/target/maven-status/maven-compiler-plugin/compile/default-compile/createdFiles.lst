@@ -1,0 +1,8 @@
+com\oracle\manager\service\CategoryService.class
+com\oracle\manager\service\ProductService.class
+com\oracle\manager\service\utils\RedisUtils.class
+com\oracle\manager\service\BaseService.class
+com\oracle\manager\service\ContentCategoryService.class
+com\oracle\manager\service\TestService.class
+com\oracle\manager\service\ContentService.class
+com\oracle\manager\service\ProductdescService.class
