@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd  ">
+
+
+	<!-- httpclient请求实例 -->
+	<bean id="httpClient" class="org.apache.http.impl.client.CloseableHttpClient"
+		scope="prototype" factory-bean="httpClientBuilder" factory-method="build">
+	</bean>
+
+	<!-- httpclient请求实例的工厂bean -->
+	<bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder">
+		<property name="connectionManager" ref="httpClientConnectionManager"></property>
+	</bean>
+
+	<!-- 连接管理 -->
+	<bean id="httpClientConnectionManager"
+		class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager">
+		<!-- 设置最大的连接数 -->
+		<property name="maxTotal" value="${httpclient.maxTotal}" />
+		<!-- 设置连接地址的最大并发数 -->
+		<property name="defaultMaxPerRoute" value="${httpclient.defaultMaxPerRoute}" />
+	</bean>
+
+	<!-- httpclient请求配置 -->
+	<bean id="requestConfig" class="org.apache.http.client.config.RequestConfig"
+		factory-bean="requestConfigBuilder" factory-method="build">
+	</bean>
+
+	<!-- httpclient请求配置工厂 -->
+	<bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig.Builder">
+		<!-- 创建连接超时时间 -->
+		<property name="connectTimeout"
+			value="${httpclient.requestConfigBuilder.connectTimeout}" />
+		<!-- 获取连接池中连接超时时间 -->
+		<property name="connectionRequestTimeout"
+			value="${httpclient.requestConfigBuilder.connectionRequestTimeout}" />
+		<!-- 获取数据的超时时间 -->
+		<property name="socketTimeout"
+			value="${httpclient.requestConfigBuilder.socketTimeout}" />
+		<!-- 请求前，测试连接是否可用 -->
+		<property name="staleConnectionCheckEnabled"
+			value="${httpclient.requestConfigBuilder.staleConnectionCheckEnabled}" />
+	</bean>
+
+	<!-- 利用线程去关连接 -->
+	<bean id="clientEvictExpiredConnections"
+		class="com.oracle.product.httpclient.utils.ClientEvictExpiredConnections"
+		destroy-method="shutdown">
+		<constructor-arg index="0" ref="httpClientConnectionManager" />
+	</bean>
+</beans>
